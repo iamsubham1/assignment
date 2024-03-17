@@ -91,7 +91,7 @@ const ProjectIsotop = ({ projects }) => {
           </a>
         </div>
         <div className="works-items works-list-items row">
-          {projects.map((project, index) => (
+          {projects.slice().reverse().map((project, index) => (
             <div key={index} className={`works-col col-xs-12 col-sm-12 col-md-12 col-lg-12 ${project.category}`}>
               <div className="works-item">
                 <a href={`/work-single/?project=${encodeURIComponent(JSON.stringify(project))}`} onClick={() => sendProps(project)}>
