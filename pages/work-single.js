@@ -13,13 +13,13 @@ const WorkSingleIsotope = dynamic(
 );
 
 const WorkSingle = () => {
+
   const router = useRouter();
   const { project } = router.query;
 
   let clickedProject = null;
   try {
     if (project) {
-      // Try parsing JSON, handle parsing errors
       clickedProject = JSON.parse(decodeURIComponent(project));
     }
   } catch (error) {
@@ -29,6 +29,17 @@ const WorkSingle = () => {
   console.log("Clicked Project:", clickedProject);
   console.log("Router query:", router.query);
 
+
+  const {
+    title = "",
+    description = "",
+    techStack = [],
+    image = {},
+    githuburl = "",
+    year = "",
+    categories = "",
+    liveurl = ""
+  } = clickedProject || {};
 
 
   const [videoToggle, setVideoToggle] = useState(false);
@@ -44,7 +55,7 @@ const WorkSingle = () => {
                 <h1
                   className="h-title"
                 >
-                  Mozar
+                  {title}
                 </h1>
               </div>
             </div>
@@ -60,17 +71,28 @@ const WorkSingle = () => {
               <div className="m-details">
                 <div className="details-label">
                   <span>Year</span>
-                  <strong>2018</strong>
+                  <strong>{year ? year : "xx-xx-xx"}</strong>
                 </div>
                 <div className="details-label">
                   <span>Technology</span>
-                  <strong>Photoshop, XD</strong>
+                  <strong>{techStack}</strong>
                 </div>
                 <div className="details-label">
                   <span>Categories</span>
                   <strong>
-                    Photography <br />
-                    Branding
+                    {categories ? categories : "Unknown"}
+                  </strong>
+                </div>
+                <div className="details-label">
+                  <span>Github-url</span>
+                  <strong>
+                    {githuburl ? githuburl : "Unknown"}
+                  </strong>
+                </div>
+                <div className="details-label">
+                  <span>Live-url</span>
+                  <strong>
+                    {liveurl ? liveurl : "Unknown"}
                   </strong>
                 </div>
               </div>
@@ -85,7 +107,7 @@ const WorkSingle = () => {
         <div className="image">
           <div
             className="img js-parallax"
-            style={{ backgroundImage: "url(assets/images/single1.jpg)" }}
+            style={{ backgroundImage: `url(${image.url})` }}
           />
         </div>
       </section>
@@ -102,19 +124,7 @@ const WorkSingle = () => {
               <div
                 className="text"
               >
-                <p>
-                  Aliquam a sapien diam. Phasellus pulvinar tellus aliquam
-                  eleifend consectetur. Sed bibendum leo quis rutrum
-                  aliquetmorbi.
-                </p>
-                <p>
-                  Donec imperdiet risus at tortor consequat maximus et eget
-                  magna. Cras ornare sagittis augue, id sollicitudin justo
-                  tristique ut. Nullam ex enim, euismod vel bibendum ultrices,
-                  fringilla vel eros. Donec euismod leo lectus, et euismod metus
-                  euismod sed. Quisque quis suscipit ipsum, at pellentesque
-                  velit. Duis a congue sem.
-                </p>
+                {description ? description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
               </div>
             </div>
           </div>

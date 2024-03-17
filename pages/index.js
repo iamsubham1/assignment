@@ -18,6 +18,8 @@ const Index = () => {
   const [services, setServices] = useState(null);
   const [experience, setExperience] = useState(null);
   const [projects, setprojects] = useState(null);
+  const [testimonials, setTestimonials] = useState(null);
+  const [socialLinks, setSocialLinks] = useState(null);
 
 
 
@@ -28,13 +30,13 @@ const Index = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await getUserInfoById();
-        console.log(response);
         setUserInfo(response.user.about);
         setUserSkills(response.user.skills)
         setServices(response.user.services);
         setExperience(response.user.timeline);
         setprojects(response.user.projects);
-
+        setTestimonials(response.user.testimonials);
+        setSocialLinks(response.user.social_handles);
       } catch (error) {
         console.error('Error fetching user info:', error.message);
       }
@@ -49,9 +51,10 @@ const Index = () => {
   const allServices = services || [];
   const allexperience = experience || [];
   const allProjects = projects || [];
+  const allTestimonials = testimonials || [];
+  const allSocialLinks = socialLinks || []
 
 
-  console.log("all skills ", allSkills);
 
   // Split description into sentences
   if (userAbout && userAbout.description) {
@@ -159,16 +162,14 @@ const Index = () => {
                 <p>
                   {userAbout.subTitle}
                 </p>
-                <div className="social-links">
-                  <a target="_blank" rel="noreferrer" href="#">
-                    <i aria-hidden="true" className="fab fa-twitter" />
-                  </a>
-                  <a target="_blank" rel="noreferrer" href="#">
-                    <i aria-hidden="true" className="fab fa-dribbble" />
-                  </a>
-                  <a target="_blank" rel="noreferrer" href="#">
-                    <i aria-hidden="true" className="fab fa-behance" />
-                  </a>
+                <div className="social-links" style={{ display: "flex", width: "60%" }}>
+                  {allSocialLinks.map((socialLink, index) => (
+                    socialLink.enabled && (
+                      <a key={index} target="_blank" rel="noreferrer" href={socialLink.url}>
+                        <img src={socialLink.image.url} alt={socialLink.platform} />
+                      </a>
+                    )
+                  ))}
                 </div>
               </div>
             </div>
@@ -345,10 +346,12 @@ const Index = () => {
                       <div className="icon">
                         <img src={service.image.url} />
                       </div>
+
                       <div className="title">{service.name}</div>
                       <div className="text">
                         <p>{service.desc}</p>
                       </div>
+                      <div className="price" style={{ fontWeight: "600", marginTop: "5%" }}>{service.charge}</div>
                       <a href="#contact-section" className="lnk">
                         order now
                       </a>
@@ -373,7 +376,6 @@ const Index = () => {
 
                   {sortedExperienceTimeline.map(item => {
                     if (item.forEducation) {
-                      console.log(item);
                       return (
                         <div className="history-item" key={`${item.startDate}-${item.endDate}`}>
                           <div className="date">{item.startDate.slice(0, 4)} - {item.endDate.slice(0, 4)}</div>
@@ -581,7 +583,7 @@ const Index = () => {
       <section className="section no-padding-top section-parallax section-parallax-4">
         <div className="container">
           {/* Testimonials */}
-          <TestimonialSlider />
+          <TestimonialSlider testimonials={allTestimonials} />
         </div>
       </section>
       <section className="section section-bg" id="blog-section">

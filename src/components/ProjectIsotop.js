@@ -42,10 +42,7 @@ const ProjectIsotop = ({ projects }) => {
 
   const activeBtn = (value) => (value === filterKey ? 'active' : '');
 
-  console.log("sds", projects);
 
-  const propProject = projects;
-  console.log("actual data :", propProject);
 
   const router = useRouter();
 
