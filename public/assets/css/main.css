@@ -2349,9 +2349,10 @@ body.light-skin .header.sticky .navbar.default:before {
 	display: inline-block;
 	vertical-align: top;
 	width: 30%;
-	font-size: 24px;
+	font-size: 20px;
 	line-height: 20px;
-	font-weight: 700;
+	font-weight: 400;
+
 }
 
 .skills-item .dots {
@@ -2581,10 +2582,12 @@ body.light-skin .header.sticky .navbar.default:before {
 
 .services-item {
 	padding: 40px 0 0 0;
+	
 }
 
 .services-item:first-child {
 	margin-top: 0;
+	
 }
 
 .services-item .icon {

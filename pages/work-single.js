@@ -3,6 +3,7 @@ import Layout from "../src/layout/Layout";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const WorkSingleIsotope = dynamic(
   () => import("../src/components/WorkSingleIsotope"),
@@ -12,6 +13,24 @@ const WorkSingleIsotope = dynamic(
 );
 
 const WorkSingle = () => {
+  const router = useRouter();
+  const { project } = router.query;
+
+  let clickedProject = null;
+  try {
+    if (project) {
+      // Try parsing JSON, handle parsing errors
+      clickedProject = JSON.parse(decodeURIComponent(project));
+    }
+  } catch (error) {
+    console.error("Error parsing project JSON:", error);
+  }
+
+  console.log("Clicked Project:", clickedProject);
+  console.log("Router query:", router.query);
+
+
+
   const [videoToggle, setVideoToggle] = useState(false);
   return (
     <Layout extraWrapClass={"project-single"}>

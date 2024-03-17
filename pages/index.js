@@ -10,8 +10,17 @@ const ProjectIsotop = dynamic(() => import("../src/components/ProjectIsotop"), {
   ssr: false,
 });
 const Index = () => {
+
+
+  //state variables
   const [userInfo, setUserInfo] = useState(null);
   const [userskills, setUserSkills] = useState(null);
+  const [services, setServices] = useState(null);
+  const [experience, setExperience] = useState(null);
+  const [projects, setprojects] = useState(null);
+
+
+
   let sentences = [];
 
   // Fetch user info 
@@ -21,7 +30,11 @@ const Index = () => {
         const response = await getUserInfoById();
         console.log(response);
         setUserInfo(response.user.about);
-        setUserSkills(response.user.skills);
+        setUserSkills(response.user.skills)
+        setServices(response.user.services);
+        setExperience(response.user.timeline);
+        setprojects(response.user.projects);
+
       } catch (error) {
         console.error('Error fetching user info:', error.message);
       }
@@ -33,14 +46,18 @@ const Index = () => {
 
   const userAbout = userInfo || {};
   const allSkills = userskills || [];
-  console.log(allSkills);
+  const allServices = services || [];
+  const allexperience = experience || [];
+  const allProjects = projects || [];
+
+
+  console.log("all skills ", allSkills);
 
   // Split description into sentences
   if (userAbout && userAbout.description) {
     sentences = userAbout.description.split(". ");
   }
-
-  console.log(sentences);
+  const sortedExperienceTimeline = allexperience.sort((a, b) => a.sequence - b.sequence);
 
   return (
     <Layout>
@@ -288,9 +305,10 @@ const Index = () => {
 
 
                 {allSkills.map((skill, index) => (
-                  <div className="skills-item" key={index}>
-                    <div className="name">{skill.name}
-                      <img src={skill.image.url} className="" /></div>
+                  <div className="skills-item" key={index} style={{ display: 'flex', justifyContent: "space-around", alignItems: "center", }}>
+
+                    <img src={skill.image.url} style={{ width: "5%", marginRight: "1%" }} />  <div className="name">{skill.name}
+                    </div>
                     <div className={`dots dots-${skill.percentage}`}>
                       <div className="dots-row">
                         {[...Array(10)].map((_, dotIndex) => (
@@ -308,89 +326,42 @@ const Index = () => {
 
               </div>
               {/* Services */}
+
+
               <div
                 className="p-title"
               >
                 SERVICES
               </div>
+
+
               <div className="services-items">
-                <div className="services-col">
-                  <div
-                    className="services-item"
-                  >
-                    <div className="icon">
-                      <i aria-hidden="true" className="fab fa-chrome" />
+
+
+
+                {allServices.map(service => (
+                  <div className="services-col">
+                    <div className="services-item" key={service._id} >
+                      <div className="icon">
+                        <img src={service.image.url} />
+                      </div>
+                      <div className="title">{service.name}</div>
+                      <div className="text">
+                        <p>{service.desc}</p>
+                      </div>
+                      <a href="#contact-section" className="lnk">
+                        order now
+                      </a>
                     </div>
-                    <div className="title">Web development</div>
-                    <div className="text">
-                      <p>
-                        Modern and mobile-ready website that will help you reach
-                        all of your marketing.
-                      </p>
-                    </div>
-                    <a href="#contact-section" className="lnk">
-                      order now
-                    </a>
+
                   </div>
-                </div>
-                <div className="services-col">
-                  <div
-                    className="services-item"
-                  >
-                    <div className="icon">
-                      <i aria-hidden="true" className="fab fa-soundcloud" />
-                    </div>
-                    <div className="title">Music writing</div>
-                    <div className="text">
-                      <p>
-                        Music copying, writing, creating, transcription and
-                        composition services.
-                      </p>
-                    </div>
-                    <a href="#contact-section" className="lnk">
-                      order now
-                    </a>
-                  </div>
-                </div>
-                <div className="services-col">
-                  <div
-                    className="services-item"
-                  >
-                    <div className="icon">
-                      <i aria-hidden="true" className="fab fa-adversal" />
-                    </div>
-                    <div className="title">Advetising</div>
-                    <div className="text">
-                      <p>
-                        Advertising services include television, radio, print,
-                        mail, and web apps.
-                      </p>
-                    </div>
-                    <a href="#contact-section" className="lnk">
-                      order now
-                    </a>
-                  </div>
-                </div>
-                <div className="services-col">
-                  <div
-                    className="services-item"
-                  >
-                    <div className="icon">
-                      <i aria-hidden="true" className="fas fa-gamepad" />
-                    </div>
-                    <div className="title">Game Development</div>
-                    <div className="text">
-                      <p>
-                        Developing memorable and unique mobile android, ios and
-                        video games.
-                      </p>
-                    </div>
-                    <a href="#contact-section" className="lnk">
-                      order now
-                    </a>
-                  </div>
-                </div>
+                ))}
               </div>
+
+
+
+
+
               {/* History */}
               <div className="history-left">
                 <div className="history-items">
@@ -399,20 +370,21 @@ const Index = () => {
                   >
                     EDUCATION
                   </div>
-                  <div
-                    className="history-item"
-                  >
-                    <div className="date">2010 - 2012</div>
-                    <div className="name">Master in Graphic</div>
-                    <div className="subname">New York University</div>
-                  </div>
-                  <div
-                    className="history-item"
-                  >
-                    <div className="date">2006 - 2009</div>
-                    <div className="name">Bachelors of FineArt</div>
-                    <div className="subname">New York University</div>
-                  </div>
+
+                  {sortedExperienceTimeline.map(item => {
+                    if (item.forEducation) {
+                      console.log(item);
+                      return (
+                        <div className="history-item" key={`${item.startDate}-${item.endDate}`}>
+                          <div className="date">{item.startDate.slice(0, 4)} - {item.endDate.slice(0, 4)}</div>
+                          <div className="name">{item.jobTitle}</div>
+                          <div className="subname">{item.company_name}</div>
+                        </div>
+                      );
+                    }
+                    return null; // If it's not an education item, return null
+                  })}
+
                 </div>
                 <div className="history-items">
                   <div
@@ -453,45 +425,25 @@ const Index = () => {
                   >
                     EXPERIENCE
                   </div>
-                  <div
-                    className="history-item"
-                  >
-                    <div className="date">2014 - Present</div>
-                    <div className="name">Soft Tech Inc.</div>
-                    <div className="subname">UI Head &amp; Manager</div>
-                    <div className="text">
-                      <p>
-                        Euismod vel bibendum ultrices, fringilla vel eros, donec
-                        euismod leo lectus.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="history-item"
-                  >
-                    <div className="date">2010 - 2014</div>
-                    <div className="name">Kana Design Studio</div>
-                    <div className="subname">UI / UX Specialist</div>
-                    <div className="text">
-                      <p>
-                        Euismod vel bibendum ultrices, fringilla vel eros, donec
-                        euismod leo lectus.
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    className="history-item"
-                  >
-                    <div className="date">2009 - 2010</div>
-                    <div className="name">Paperart</div>
-                    <div className="subname">Graphic Designer</div>
-                    <div className="text">
-                      <p>
-                        Euismod vel bibendum ultrices, fringilla vel eros, donec
-                        euismod leo lectus.
-                      </p>
-                    </div>
-                  </div>
+
+                  {sortedExperienceTimeline.map(item => {
+                    if (item.forEducation) {
+
+                      return null; // We return null for items with forEducation=true to avoid rendering them here
+                    } else {
+                      return (
+                        <div className="history-item" key={item.sequence}>
+                          <div className="date" style={{ color: "#FF8059" }}>
+                            {item.startDate.slice(8, 10)}/{item.startDate.slice(5, 7)}/{item.startDate.slice(0, 4)} - {item.endDate ? item.endDate.slice(8, 10) + '/' + item.endDate.slice(5, 7) + '/' + item.endDate.slice(0, 4) : 'Present'}
+                          </div>
+                          <div className="name">{item.company_name}</div>
+                          <p style={{ marginTop: "1%", fontWeight: "500" }}>Job Title: {item.jobTitle} <br /> Location: {item.jobLocation}</p>
+                          <div className="subname" style={{ marginTop: "-6%" }}>{item.summary}</div>
+                        </div>
+                      );
+                    }
+                  })}
+
                 </div>
               </div>
               <div className="clear" />
@@ -536,7 +488,7 @@ const Index = () => {
             </div>
           </div>
           {/* Works */}
-          <ProjectIsotop />
+          <ProjectIsotop projects={allProjects} />
         </div>
       </section>
       <section className="section" id="pricing-section">
