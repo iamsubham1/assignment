@@ -149,9 +149,9 @@ const Header = () => {
             </a>
             {/* menu btn */}
             <a
-            href="#"
-            className="menu-btn"
-            onClick={() => openMenu(event)}
+              href="#"
+              className="menu-btn"
+              onClick={() => openMenu(event)}
             >
               <span />
             </a>

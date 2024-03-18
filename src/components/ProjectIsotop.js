@@ -53,6 +53,7 @@ const ProjectIsotop = ({ projects }) => {
     });
   };
 
+  console.log(projects);
 
   return (
     <Fragment>
@@ -61,7 +62,7 @@ const ProjectIsotop = ({ projects }) => {
           <a className={`c-pointer ${activeBtn('*')}`} onClick={handleFilterKeyChange('*')} data-href=".works-col">
             All
           </a>
-          <a
+          {/* <a
             className={`c-pointer ${activeBtn('sorting-ui-ux-design')}`}
             onClick={handleFilterKeyChange('sorting-ui-ux-design')}
             data-href=".sorting-ui-ux-design"
@@ -74,44 +75,53 @@ const ProjectIsotop = ({ projects }) => {
             data-href=".sorting-photo"
           >
             Photography
-          </a>
+          </a> */}
           <a
             className={`c-pointer ${activeBtn('sorting-development')}`}
-            onClick={handleFilterKeyChange('sorting-development')}
-            data-href=".sorting-development"
+            onClick={handleFilterKeyChange('next')}
+            data-href=".next"
           >
-            Development
-          </a>
+            Next.js          </a>
           <a
             className={`c-pointer ${activeBtn('sorting-branding')}`}
-            onClick={handleFilterKeyChange('sorting-branding')}
-            data-href=".sorting-branding"
+            onClick={handleFilterKeyChange('mern')}
+            data-href=".mern"
           >
-            Branding
+            MERN
           </a>
         </div>
         <div className="works-items works-list-items row">
-          {projects.slice().reverse().map((project, index) => (
-            <div key={index} className={`works-col col-xs-12 col-sm-12 col-md-12 col-lg-12 ${project.category}`}>
-              <div className="works-item">
-                <a href={`/work-single/?project=${encodeURIComponent(JSON.stringify(project))}`} onClick={() => sendProps(project)}>
-                  <a>
-                    <span className="image">
+          {projects.slice().reverse().map((project, index) => {
+            const filter = index % 2 === 0 ? 'mern' : 'next';
+
+            return (
+              <div key={index} className={`works-col col-xs-12 col-sm-6 col-md-6 col-lg-6 ${filter}`}>
+                <div className="works-item">
+                  <a href={`/work-single/?project=${encodeURIComponent(JSON.stringify(project))}`} onClick={() => sendProps(project)}>
+                    <span className="image" style={{ width: "100%" }}>
                       <span className="img">
-                        <img src={project.image.url} alt={project.title} />
+                        <img src={project.image.url} alt={project.title} style={{ objectFit: "contain" }} />
                         <span className="overlay" />
                       </span>
+                      <h1 className='projectTitle'>{project.title}</h1>
+                      <div style={{ display: "flex", gap: "3%", }}>
+                        {project.techStack.map((tech, index) => (
+                          <h5 key={index} style={{ fontFamily: "sans-serif", marginTop: "-5%", fontWeight: "500", color: "#FF8059", fontSize: ".9rem" }}>{tech}</h5>
+
+                        ))}
+                      </div>
                     </span>
-                    <span className="desc">
-                      <span className="name">{project.title}</span>
-                      <span className="category">{project.category}</span>
-                    </span>
+
                   </a>
-                </a>
+
+
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
+
+
       </div>
     </Fragment>
   );

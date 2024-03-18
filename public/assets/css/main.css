@@ -167,6 +167,7 @@ strong {
 
 .fw-row {
 	display: flex;
+	
 }
 
 .fw-row .fw-col-left {
@@ -2670,6 +2671,7 @@ body.light-skin .header.sticky .navbar.default:before {
 	color: #FFF;
 }
 
+	
 .works-item a {
 	text-decoration: none;
 }
